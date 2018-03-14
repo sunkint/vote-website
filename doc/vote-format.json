@@ -1,0 +1,33 @@
+{
+  "version": 0.1,
+  "vote_group": true,
+  "title": "个人情况统计",
+  "description": "情况统计一下",
+  "deadline": 1523542342000,
+  "author": "孙天骁",
+  "author_code": "admin",
+  "votes": [
+    {
+      "title": "你今年多大了？",
+      "description": "想知道你们今年多大了",
+      "max_selected_count": 1,
+      "options": [
+        {"value": "14岁以下", "guid": "200SDF234F2", "count": 0, "percent": 0},
+        {"value": "14-22岁", "guid": "234FDSFFCSD", "count": 0, "percent": 0},
+        {"value": "23岁-35岁", "guid": "SDF234E2DDF", "count": 0, "percent": 0},
+        {"value": "36岁以上", "guid": "234EDSFW23F", "count": 0, "percent": 0}
+      ]
+    },
+    {
+      "title": "你月收入多少？",
+      "description": "统计月收入",
+      "max_selected_count": 1,
+      "options": [
+        {"value": "3000以下", "guid": "200SDF234F2", "count": 0, "percent": 0},
+        {"value": "3000-5000", "guid": "23425SDFSF4", "count": 0, "percent": 0},
+        {"value": "5000-7000", "guid": "DSGVG3W4FVF", "count": 0, "percent": 0},
+        {"value": "7000以上", "guid": "34RFRVGDGDG", "count": 0, "percent": 0}
+      ]
+    }
+  ]
+}
