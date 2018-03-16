@@ -12,20 +12,20 @@
             <li v-for="(n, i) in sVote.options" :key="i">{{n.value}}</li>
           </ol>
         </p>
-        <p class="summary" v-else></p>
+        <p class="summary" v-else>（共 {{votes.length}} 个投票）{{description}}</p>
       </div>
       <div class="vote-area" v-else>
         <div class="vote-on" v-if="!isShowingResult">
           <p class="vote-desc">{{description}}</p>
-          <div class="vote-item-list">
+          <div class="vote-item-list" :class="{group: isGroup}">
             <div class="vote-item" v-for="(v, i) in votes" :key="i">
-              <p class="vote-sub-title" v-if="isGroup">{{v.title || title}}</p>
-              <p class="vote-sub-desc" v-if="isGroup && !!v.description">{{v.description}}</p>
+              <p class="vote-sub-title" v-if="isGroup">{{i + 1}}. {{v.title}}</p>
+              <p class="vote-sub-desc grey-text text-darken-1" v-if="isGroup && !!v.description">{{v.description}}</p>
               <ul class="vote-options">
                 <li v-for="n in v.options" :key="n.guid">
                   <label>
-                    <input type="checkbox" :value="n.guid" v-model="selectedOptions[i]" v-if="sVote.isMultiSelect" :disabled="selectedOptions[i].length >= v.max_selected_count && selectedOptions[i].indexOf(n.guid) < 0">
-                    <input type="radio" :value="n.guid" v-model="selectedOptions[i]" class="with-gap" :name="`group${id}`" v-else>
+                    <input type="checkbox" :value="n.guid" v-model="selectedOptions[i]" v-if="v.max_selected_count > 1" :disabled="selectedOptions[i].length >= v.max_selected_count && selectedOptions[i].indexOf(n.guid) < 0">
+                    <input type="radio" :value="n.guid" v-model="selectedOptions[i]" class="with-gap" :name="`group${id}_${i}`" v-else>
                     <span class="vote-label">{{n.value}}</span>
                   </label>
                 </li>
@@ -137,7 +137,7 @@ export default {
       }
       for(let os of this.selectedOptions) {
         if(os.length === 0) {
-          M.toast({html: '你没有选择任何选项', displayLength: 2000});
+          M.toast({html: this.isGroup ? '你没有参与全部的子投票' : '你没有选择任何选项', displayLength: 2000});
           return;
         }
       }
@@ -169,6 +169,7 @@ export default {
   },
   created () {
     this.getStatData();
+    if(this.id == 15) window.vm = this;
   }
 }
 </script>
@@ -220,16 +221,29 @@ span.card-title {
 }
 
 div.vote-area {
+  div.vote-item-list {
+    &.group {
+      margin-top: 12px;
+
+      div.vote-item {
+        &:not(:last-child) {
+          border-bottom: 1px dashed #ccc;
+        }
+      }
+    }
+  }
+
   div.vote-item {
     padding-bottom: 12px;
 
     &:not(:first-child) {
-      padding-top: 12px;
+      padding-top: 4px;
     }
+  }
 
-    &:not(:last-child) {
-      border-bottom: 1px dashed #ccc;
-    }
+  p.vote-sub-title {
+    font-size: 1.2em;
+    margin: 6px 0 4px;
   }
 
   p.vote-desc, p.vote-sub-desc {

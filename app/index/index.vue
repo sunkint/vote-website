@@ -73,7 +73,7 @@ export default {
     this.loadVoteList();
   },
   mounted () {
-    M.FloatingActionButton.init(document.querySelector('.fixed-action-btn'));
+    // M.FloatingActionButton.init(document.querySelector('.fixed-action-btn'));
   }
 }
 </script>
