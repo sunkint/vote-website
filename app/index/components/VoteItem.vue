@@ -156,11 +156,26 @@ export default {
         }
       });
     },
+    calculatePercent () {
+      for(let vote of this.votes) {
+        let sum = 0;
+        for(let o of vote.options) {
+          sum += this.statData[o.guid].count;
+        }
+        for(let o of vote.options) {
+          let statData = this.statData[o.guid];
+          if(!_.isUndefined(statData) && statData.count > 0) {
+            statData.percent = Math.round(statData.count / sum * 100);
+          }
+        }
+      }
+    },
     getStatData () {
       this.$http.get('getStatData', {params: {id: this.id}}).then(data => {
         let body = data.body;
         this.isVoted = body.voted;
         this.statData = body.data;
+        this.calculatePercent();
         this.isBusy = false;
       }).catch(() => {
         this.isBusy = false;
