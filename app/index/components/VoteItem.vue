@@ -145,6 +145,7 @@ export default {
       this.$http.post('vote', {id: this.id, options: this.selectedOptions}).then(res => {
         M.toast({html: '投票成功', displayLength: 2000});
         this.statData = res.body.data;
+        this.calculatePercent();
         this.isVoted = true;
         this.isBusy = false;
       }).catch(err => {
