@@ -197,10 +197,6 @@ export default {
     user-select: none;
     -webkit-user-select: none;
   }
-
-  &.expired {
-    
-  }
 }
 
 p.summary {

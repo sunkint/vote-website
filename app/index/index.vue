@@ -6,7 +6,7 @@
         <div class="main">
 
           <div class="handle-panel">
-            <router-link to="/add" class="waves-effect waves-light btn"><i class="material-icons left">add</i>添加投票</router-link>
+            <a href="javascript:;" class="waves-effect waves-light btn" @click="addVote"><i class="material-icons left">add</i>添加投票</a>
             <div class="user-info right chip" v-if="!!user.name" @click="logout">
               <img :src="user.avatar"> {{user.name}}
             </div>
@@ -15,6 +15,11 @@
 
           <div class="card-list">
             <VoteItem :voteData="n" v-for="(n, i) in voteList" :key="i" />
+          </div>
+          <div class="loading-tip">
+            <span v-if="isComplete">全部加载结束</span>
+            <span v-if="!isComplete && isLoading">正在加载…</span>
+            <a href="javascript:;" v-if="!isComplete && !isLoading" @click="loadVoteList">点此继续加载</a>
           </div>
         </div>
       </div>
@@ -48,23 +53,39 @@ export default {
         code: null,
         avatar: null,
       },
+      isLoading: false,
+      isComplete: false,
       maxId: 0,
       voteList: [],
-      hasMore: true,
     };
   },
   methods: {
     loadVoteList () {
+      if(this.isLoading || this.isComplete) return;
+      this.isLoading = true;
       this.$http.get('getVoteList?maxId=' + this.maxId).then(res => {
         this.voteList.push(...res.body.list);
-        this.maxId = this.voteList[this.voteList.length - 1].id;
-        this.hasMore = this.maxId > 1;
+        if(this.voteList.length == 0) this.maxId = -1;
+        else this.maxId = this.voteList[this.voteList.length - 1].id;
+        this.isComplete = res.body.complete;
+        this.isLoading = false;
+      }).catch(err => {
+        M.toast({html: '加载失败'});
+        this.isLoading = false;
       });
     },
     logout () {
       if(confirm('确实要退出账号吗？')) {
         delCookie('vote_user_uid');
         this.user.name = this.user.code = this.user.avatar = null;
+      }
+    },
+    addVote () {
+      if(this.user.name === null) {
+        M.toast({html: '请先登录', displayLength: 2000});
+        this.$bus.$emit('startLoginModal');
+      }else {
+        this.$router.push('/add');
       }
     }
   },
@@ -89,5 +110,9 @@ div.handle-panel {
 
 div.user-info {
   margin-top: 2px;
+}
+
+div.loading-tip {
+  text-align: center;
 }
 </style>

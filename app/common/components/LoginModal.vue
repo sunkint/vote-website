@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="col s6 login-item">
-          <div class="waves-effect">
+          <div class="waves-effect" @click="loginFromWeChat">
             <img src="../../assets/wechat_128.png" alt="微信">
             <p>微信账号</p>
           </div>
@@ -32,6 +32,9 @@ export default {
       }else {
         location = 'http://home.me/user/authorize/vote.php';
       }
+    },
+    loginFromWeChat () {
+      M.toast({html: '微信登录建设中', displayLength: 2500});
     }
   },
   mounted () {

@@ -120,9 +120,6 @@ export default {
         }
       }
 
-      console.log(form);
-      // return;
-
       // 提交投票
       this.isBusy = true;
       this.errorTip = '';
