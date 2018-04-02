@@ -15,8 +15,8 @@
         <p class="summary" v-else>（共 {{votes.length}} 个投票）{{description}}</p>
       </div>
       <div class="vote-area" v-else>
+        <p class="vote-desc">{{description}}</p>
         <div class="vote-on" v-if="!isShowingResult">
-          <p class="vote-desc">{{description}}</p>
           <div class="vote-item-list" :class="{group: isGroup}">
             <div class="vote-item" v-for="(v, i) in votes" :key="i">
               <p class="vote-sub-title" v-if="isGroup">{{i + 1}}. {{v.title}}</p>
@@ -260,9 +260,12 @@ div.vote-area {
 
   p.vote-desc, p.vote-sub-desc {
     white-space: pre-wrap;
+    color: gray;
+    // text-decoration: underline dashed #dadada;
   }
 
   ul.vote-options {
+    // margin-top: 7px;
     margin-bottom: 6px;
 
     li + li {

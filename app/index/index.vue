@@ -65,7 +65,7 @@ export default {
       this.isLoading = true;
       this.$http.get('getVoteList?maxId=' + this.maxId).then(res => {
         this.voteList.push(...res.body.list);
-        if(this.voteList.length == 0) this.maxId = -1;
+        if(this.voteList.length == 0) this.maxId = 0;
         else this.maxId = this.voteList[this.voteList.length - 1].id;
         this.isComplete = res.body.complete;
         this.isLoading = false;
