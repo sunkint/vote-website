@@ -7,14 +7,14 @@
 
           <div class="handle-panel">
             <a href="javascript:;" class="waves-effect waves-light btn" @click="addVote"><i class="material-icons left">add</i>添加投票</a>
-            <div class="user-info right chip" v-if="!!user.name" @click="logout">
+            <div class="user-info right chip" v-if="!!user.name" @click.left="logout" @click.middle="startManage">
               <img :src="user.avatar"> {{user.name}}
             </div>
             <a class="waves-effect waves-light btn right blue" @click="$bus.$emit('startLoginModal')" v-else><i class="material-icons left">person</i>登录</a>
           </div>
 
           <div class="card-list">
-            <VoteItem :voteData="n" v-for="(n, i) in voteList" :key="i" />
+            <VoteItem :voteData="n" v-for="(n, i) in voteList" :key="i" :manage="canManage" @delete="handleDelete" />
           </div>
           <div class="loading-tip">
             <span v-if="isComplete">全部加载结束</span>
@@ -87,6 +87,28 @@ export default {
       }else {
         this.$router.push('/add');
       }
+    },
+    handleDelete (id) {
+      for(let i in this.voteList) {
+        if(this.voteList[i].id === id) {
+          this.voteList.splice(i, 1);
+          return;
+        }
+      }
+    },
+    startManage () {
+      if(this.user.code === 'admin') {
+        if(this.$route.query.mng) {
+          this.$router.replace('');
+        }else {
+          this.$router.replace('?mng=1');
+        }
+      }
+    }
+  },
+  computed: {
+    canManage () {
+      return this.user.code === 'admin' && this.$route.query.mng === '1';
     }
   },
   components: {VoteItem},

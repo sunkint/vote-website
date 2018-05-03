@@ -55,6 +55,9 @@
           <span class="deadline"><i class="material-icons">access_time</i> {{deadline}} 截止</span>
           <span class="packup right" @click.stop="packup"><i class="material-icons">keyboard_arrow_up</i> 收起</span>
         </div>
+        <div class="manage-box orange lighten-5" v-if="manage">
+          <a href="javascript:;" class="pink-text text-lighten-2" @click="deleteVote"><i class="material-icons tiny">delete</i> 删除投票</a>
+        </div>
       </div>
     </div>
   </div>
@@ -72,7 +75,11 @@ let formatDate = function (date) {
 
 export default {
   props: {
-    voteData: Object
+    voteData: Object,
+    manage: {
+      type: Boolean,
+      default: false,
+    }
   },
   data () {
     return {
@@ -181,6 +188,16 @@ export default {
       }).catch(() => {
         this.isBusy = false;
       });
+    },
+    deleteVote () {
+      if(confirm('确认要永久删除该投票吗？')) {
+        this.$http.post('manage/deleteVote', {id: this.id}).then(res => {
+          this.$emit('delete', this.id);
+          M.toast({html: '删除成功', displayLength: 1500});
+        }, err => {
+          M.toast({html: '删除失败'});
+        });
+      }
     }
   },
   created () {
@@ -338,6 +355,16 @@ div.vote-area {
 
     span.packup {
       cursor: pointer;
+    }
+  }
+
+  div.manage-box {
+    border-radius: 5px;
+    margin-top: 12px;
+    padding: 8px 12px;
+
+    i {
+      vertical-align: -2px;
     }
   }
 }
